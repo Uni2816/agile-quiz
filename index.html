@@ -67,6 +67,44 @@ button{font:inherit;color:inherit;cursor:pointer}
 .wi .ans{color:var(--ok);font-weight:600;margin:0 0 6px}.wi .ex{margin:0;padding:10px;border-radius:10px;background:var(--bg);font-size:.92rem;white-space:pre-line}
 .wi .rm{margin-top:8px;padding:5px 12px;border-radius:8px;border:1px solid var(--bd);background:var(--card);font-size:.82rem}
 .wi ul{margin:6px 0;padding-left:20px;color:var(--mu)}
+
+:root{--onac:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--onac:#12151e}}
+:root[data-theme="dark"]{--onac:#12151e}
+main{max-width:1320px;padding:20px 24px 48px}
+#quiz,#result,#wbPg,#chapPg{max-width:700px;margin-left:auto;margin-right:auto}
+.hero{background:none;color:var(--tx);padding:0;border-radius:0;margin:4px 0 18px}.hero h1{font-size:1.45rem}.hero p{color:var(--mu);opacity:1}
+.sec{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:22px 28px;margin-bottom:20px}
+.tcard{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.tcard h2{margin:0 0 4px;font-size:1.25rem}.tcard p{margin:0;color:var(--mu);font-size:.92rem}
+.tb{display:flex;gap:12px;flex-wrap:wrap}
+.btnp{padding:14px 26px;border-radius:12px;border:0;background:var(--ac);color:var(--onac);font-weight:700;font-size:1rem}
+.btns{padding:14px 22px;border-radius:12px;border:1px solid var(--bd);background:transparent}
+.dim{opacity:.55}
+.cols{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:860px){.cols{grid-template-columns:1fr}.sec{padding:18px 16px}}
+.fg{padding:18px 0;border-bottom:1px dashed var(--bd)}.fg:first-child{padding-top:0}.fg:last-child{border-bottom:0;padding-bottom:0}
+.fl{font-size:.8rem;color:var(--mu);margin:0 0 12px}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{padding:12px 20px;border-radius:999px;border:1px solid var(--bd);background:transparent;font-size:1rem}
+.chip:hover{border-color:var(--ac)}
+.chip.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+details>summary{cursor:pointer;list-style:none;font-weight:700}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"\25B6";display:inline-block;font-size:.75em;margin-right:8px;transition:transform .15s}
+details[open]>summary::before{transform:rotate(90deg)}
+details>summary small{color:var(--mu);font-weight:400;margin-left:6px}
+.tpl{margin-top:14px;display:grid;gap:8px}
+.tpi{display:flex;align-items:center;gap:10px;text-align:left;padding:10px 12px;border-radius:12px;border:1px solid var(--bd);background:transparent}
+.tpi i{width:20px;height:20px;border-radius:6px;border:2px solid var(--bd);flex:none;display:grid;place-items:center;font-style:normal;font-size:.8rem;color:var(--onac)}
+.tpi.on{border-color:var(--ac)}.tpi.on i{background:var(--ac);border-color:var(--ac)}
+.tpi span{flex:1}.tpi small{color:var(--mu)}
+.shl{display:flex;align-items:center;gap:10px;cursor:pointer}.shl input{width:20px;height:20px;accent-color:var(--ac)}
+.fgo{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.fgo small{color:var(--mu)}
+.pi{border-top:1px solid var(--bd);padding:12px 0}.pi:first-child{border-top:0}
+.pih{display:flex;align-items:center;justify-content:space-between;gap:10px}.pih b{font-size:.95rem}
+.pi .bar{margin:8px 0 6px}.pi small{color:var(--mu)}
+.pbody{margin-top:14px}
 </style>
 </head>
 <body>
@@ -74,12 +112,20 @@ button{font:inherit;color:inherit;cursor:pointer}
 <div id="home">
   <header class="hero" id="hero"><h1>敏捷專案管理題庫</h1><p id="tot"></p></header>
   <div id="mainPg">
-    <button class="wbk" id="wbk"><span><b>📕 錯題本</b><small id="wbs"></small></span><em>查看詳解 ›</em></button>
-    <section class="panel"><div class="ph"><span class="pl">步驟 1</span><h2>選擇要練習的章節</h2></div>
-      <div class="selbar"><button class="mini" id="all">全選</button><button class="mini" id="none">清除</button><span id="sum"></span></div>
-      <div id="chs"></div></section>
-    <section class="panel"><div class="ph"><span class="pl">步驟 2</span><h2>開始練習</h2></div>
-      <div class="menu" id="menu"></div><div class="stat" id="stat"></div></section>
+    <section class="sec tcard"><div><h2>開始今天的練習</h2><p id="tsub"></p></div>
+      <div class="tb"><button class="btnp" id="quick">快速練 10 題</button><button class="btns" id="wbk2">📕 錯題本 (0)</button></div></section>
+    <div class="cols">
+      <section class="sec">
+        <div class="fg"><p class="fl">章節</p><div class="chips" id="fch"></div></div>
+        <div class="fg"><p class="fl">題目來源</p><div class="chips" id="fsrc"></div></div>
+        <div class="fg"><details id="tpd"><summary>選擇主題<small id="tpsum">全部主題</small></summary><div class="pbody"><button class="mini" id="tpclr">清除選取</button><div class="tpl" id="ftl"></div></div></details></div>
+        <div class="fg"><p class="fl">出題範圍</p><div class="chips" id="fsc"></div></div>
+        <div class="fg"><p class="fl">題數</p><div class="chips" id="fcnt"></div></div>
+        <div class="fg"><label class="shl"><input type="checkbox" id="fsh"><span>打亂選項順序</span></label></div>
+        <div class="fg fgo"><button class="btnp" id="fgo">開始測驗</button><small id="finfo"></small></div>
+      </section>
+      <section class="sec"><details id="prog"><summary>答題卡與學習進度<small id="psum"></small></summary><div class="pbody" id="plist"></div></details></section>
+    </div>
   </div>
   <section class="panel hide" id="wbPg"><button class="back" id="wback">← 返回首頁</button>
     <div class="ph"><span class="pl">錯題本</span><h2 id="wtitle"></h2></div>
@@ -87,7 +133,7 @@ button{font:inherit;color:inherit;cursor:pointer}
     <div id="wlist"></div></section>
   <section class="panel hide" id="chapPg"><button class="back" id="back">← 返回首頁</button>
     <div class="ph"><span class="pl">章節題目</span><h2 id="sub"></h2></div>
-    <div class="stat" id="stat2"></div><div class="menu"><button id="only"><b>只練習這一章</b><span>回首頁並只選取本章</span></button></div>
+    <div class="stat" id="stat2"></div><div class="menu"><button id="only"><b>只練習這一章</b><span>回首頁並篩選本章</span></button></div>
     <div id="qlist"></div></section>
 </div>
 <div id="quiz" class="hide"></div>
@@ -412,36 +458,72 @@ var Q4=[
 var Q5=[["下列哪一項不是Scrum中的角色?", "專案經理", "產品負責人", "團隊", "Scrum大師", "Scrum 團隊由產品負責人、開發團隊、Scrum 大師組成,沒有專案經理。"], ["下列哪一項不是「看板」開發有關的最佳實務?", "結對編程", "限制進行中的工作", "流程優化", "工作流程視覺化", "結對編程是 XP 的實務;看板的實務包含可視化、限制進行中的工作(WIP)、管理流程與流程優化。"], ["根據「敏捷原則」(Agile Principle),最佳的架構、需求及設計皆來自於下列哪一項?", "能自我組織的團隊", "產品負責人(Product Owner)", "敏捷教練(Coach)", "專案經理", "敏捷原則:最佳的架構、需求與設計來自能自我組織的團隊。"], ["下列哪一問題適合在「每日立會」中提出?", "你碰到的困難是什麼?", "你明天預計完成哪些工作?", "我們的團隊要如何才能增加效率", "我們的團隊要如何才能讓事情有效果", "每日立會的三個問題:昨天完成什麼、今天要做什麼、有沒有遇到困難。團隊如何增加效率屬回顧會議。"], ["下列哪一項是「水晶家族」的價值觀?", "專注於人和溝通", "勇氣", "消除浪費", "授權團隊", "水晶家族(Alistair Cockburn)的價值觀是高耐受性、專注於人和溝通。"], ["下列哪一項最為廣泛應用?", "Scrum", "精益", "XP", "水晶家族", "調查顯示 Scrum 是使用率最高的敏捷方法。"], ["「結對編程」是下列哪一項的主張?", "XP", "精益", "Scrum", "水晶家族", "結對編程(Pair Programming)是 XP 的實務之一。"], ["下列哪一項不是「精益開」開發的核心原則?", "持續整合", "消除浪費", "強化學習", "授權團隊", "精益七原則:消除浪費、強化學習、盡可能晚決策、盡可能快交付、授權團隊、建構完整性、著眼整體。持續整合屬 XP。"], ["「盡可能晚做決策」是下列何者的主張?", "精益", "XP", "Scrum", "水晶家族", "盡可能晚做決策是精益七原則之一。"], ["下列哪一項不是Scrum的三大支柱?", "溝通(Communication)", "透明(Transparency)", "檢視(Inspection)", "調適(Adaptation)", "Scrum 三大支柱是透明、檢視、調適。"], ["RUP 模式以什麼作為系統開發的首要工作,以便更精確了解使用者需求?", "企業塑模", "程式撰寫", "部署", "測試", "RUP 以企業塑模為首要工作。"], ["螺旋模式藉由哪一項作法,大幅降低軟體失敗造成損失的可能性?", "風險分析", "完整文件", "嚴格簽核", "一次性完整需求", "螺旋模式每個循環都做風險分析。"], ["依「敏捷方法和實務的使用率」調查(9th State of Agile),使用率最高的敏捷方法是什麼?", "Scrum", "Kanban", "XP", "Lean Development", "調查顯示 Scrum 使用率最高。"], ["若開發團隊將雛型系統視為最終產品,最可能造成什麼後果?", "犧牲產品品質", "客戶滿意度提高", "需求更完整", "文件更齊全", "把雛型當最終產品會犧牲品質,且文件較不完備。"], ["下列何者「不是」Scrum 的產出?", "甘特圖", "產品待辦清單", "燃盡圖", "衝刺待辦清單", "Scrum 產出:產品待辦清單、衝刺待辦清單、增量成果、燃盡圖。甘特圖不是。"], ["雛型模式是由哪位學者於哪一年提出?", "Bally et al.,1977", "Bally et al.,1972", "Barry,1988", "Royce,1970", "雛型模式由 Bally et al. 於 1977 年提出;漸進模式是 Mills 於 1972 年;影片中此題曾選 1972 為錯誤答案。"], ["Scrum 是由誰在何時共同提出的?", "Ken Schwaber 與 Jeff Sutherland 於 1995 年", "Kent Beck 於 1999 年", "Alistair Cockburn 於 2001 年", "Jeff De Luca 於 1997 年", "Scrum 由 Ken Schwaber 與 Jeff Sutherland 於 1995 年共同提出。"], ["為什麼漸進模式的總開發成本通常大於瀑布模式?", "因為每個漸進階段都如同瀑布式進行,各有獨自的需求、分析、設計、開發、測試流程", "因為不需要測試", "因為只做核心功能", "因為客戶不參與", "漸進模式每個階段都像一次小型瀑布流程,所以總成本通常較高。"], ["下列何者是螺旋模式的缺點?", "過分依賴風險分析的經驗與技術,分析若出現偏差將造成重大損失", "無法建立雛型", "不重視軟體測試", "客戶無法提供回饋", "螺旋模式倚重風險分析,偏差會造成重大損失。"], ["下列何者「不是」Scrum 團隊的組成角色?", "專案經理", "產品負責人(PO)", "開發團隊", "Scrum 大師", "Scrum 團隊由產品負責人、開發團隊、Scrum 大師組成。"], ["下列何者「不是」Scrum 的基本價值觀?", "檢視", "公開", "專注", "承諾", "價值觀為公開、勇氣、尊重、專注、承諾;檢視是支柱。"], ["下列哪一項最符合 Scrum 的定義?", "讓團隊關注於「在最短時間內交付最高商業價值產品」的框架", "一套詳細規定所有文件格式的重量級流程", "以一次完整交付為目標的開發方法", "專門用於測試階段的管理工具", "Scrum 是輕量框架,聚焦在最短時間內交付最高商業價值。"], ["下列何者「不是」RUP 的九大工作流程之一?", "風險分析", "企業塑模", "組態管理與變更管理", "環境", "RUP 九大工作流程:企業塑模、需求、分析與設計、實作、測試、部署、組態與變更管理、專案管理、環境。"], ["由 Kent Beck 創建,專注於敏捷開發實務,強調效率、聚焦客戶、回饋及品質的是哪一種方法論?", "終極編程(XP)", "Scrum", "精益(Lean)", "看板(Kanban)", "XP 由 Kent Beck 等人創建。"], ["下列何者是 Scrum 的三大支柱之一?", "透明", "承諾", "勇氣", "尊重", "三大支柱是透明、檢視、調適;其餘為價值觀。"], ["下列何者符合瀑布模式的特性?", "各階段工作人員須完成正確、完整、易讀的文件,移交給下一階段", "各階段可以同時並行進行", "專案資源配置以客戶需求變動為基礎", "客戶全程密集參與開發過程", "瀑布模式講求階段文件與移交。"], ["漸進模式的第一個漸進階段(漸進一)建置的是什麼?", "核心功能", "功能一", "所有功能的雛型", "部署與教育訓練", "漸進一建置核心功能。"], ["RUP 採用迭代式開發,主要優點為何?", "每次迭代中能及早發現問題,降低開發風險", "完全不需要文件", "不需要專案管理", "可以省略測試", "迭代式開發可及早發現問題,降低風險。"], ["在 Scrum 流程中,一個衝刺(Sprint)與每日立會的週期分別為何?", "衝刺約 2–4 週,每日立會每 24 小時一次", "衝刺約 6 個月,每日立會每週一次", "衝刺約 1 天,每日立會每月一次", "衝刺約 3 個月,每日立會每 24 小時一次", "衝刺 2–4 週,每日立會每天一次。"], ["雛型模式較不適用於哪一類專案?", "大型及多人參與的系統開發專案", "小型專案", "需要快速確認需求的專案", "使用者介面導向的專案", "雛型缺乏整體規劃,較不適用於大型多人專案。"], ["RUP 模式的四個階段為何?", "初始、詳述、建構、轉移", "需求、設計、開發、測試", "構想、推測、探索、調整", "決定目標、風險分析、開發、規劃", "RUP 四階段:初始、詳述、建構、轉移。"], ["哪一種敏捷方法論的重點是「精簡與流程最佳化」,強調減少無法創造客戶價值的工作?", "精益(Lean)", "DSDM", "FDD", "Crystal", "精益強調消除浪費、減少無法創造客戶價值的工作。"], ["為什麼螺旋模式「不利於已簽署合約的客戶與開發者之間的協調」?", "因為開發流程過於靈活", "因為文件過於繁雜", "因為工具受限於特定廠商", "因為客戶完全不參與", "螺旋模式流程過於靈活,不利於已簽約客戶與開發者協調。"], ["下列敏捷方法論與創建者的配對,何者正確?", "看板(Kanban)— David J. Anderson", "Scrum — Kent Beck", "功能驅動開發(FDD)— Alistair Cockburn", "水晶家族(Crystal)— Jeff De Luca", "看板為 David J. Anderson;Scrum 為 Schwaber 與 Sutherland;FDD 為 Jeff De Luca;水晶家族為 Alistair Cockburn。"], ["螺旋模式是由哪位學者於哪一年提出?", "Barry,1988", "Royce,1970", "Bally et al.,1977", "Booch,1999", "螺旋模式由 Barry 於 1988 年提出。"], ["雛型模式屬於客戶導向的分析與設計,但可能遇到什麼問題?", "大部分時間客戶並不清楚他們真正的需求是什麼", "客戶參與度過低", "開發團隊不願意修改系統", "專案一開始就能精確估算完成時間", "客戶往往不清楚真正需求。"], ["瀑布模式的標準開發流程順序為何?", "需求→設計→開發→測試→部署", "設計→需求→開發→測試→部署", "需求→開發→設計→部署→測試", "需求→設計→測試→開發→部署", "瀑布流程:需求、設計、開發、測試、部署。"], ["瀑布模式的風險與失敗成本偏高,主要原因為何?", "專案較後階段才開始進行開發", "專案初期過度簡化需求", "客戶參與過多", "各階段不需要審查簽核", "開發較晚才開始,錯誤到後期才發現,風險與失敗成本偏高。"], ["雛型模式強調的重點是什麼?", "雛型的快速開發及使用者高度參與", "風險分析與風險管理", "完整的分析設計文件", "以企業塑模為首要工作", "雛型模式強調快速開發雛型與使用者高度參與。"], ["下列何者是漸進模式的優點?", "預算編列、付款、系統測試及教育訓練可分階段進行,降低財務與失敗風險", "總開發成本一定低於瀑布模式", "不需要對每個漸進階段做完整定義", "各漸進階段之間高度關聯、容易整合", "漸進模式可分階段編列預算、付款與測試,降低財務與失敗風險。"], ["下列何者「不是」Scrum 的三大屬性?", "文件嚴謹", "輕量的", "簡單易懂", "難以精通", "Scrum 三大屬性:輕量的、簡單易懂、難以精通。"], ["在瀑布模式中,一個階段的結束代表什麼意義?", "專案管理的里程碑,據以決定是否進入下一階段", "專案正式結束", "必須重新蒐集需求", "客戶必須完成驗收並付款", "階段結束是專案管理的里程碑。"], ["下列何者「不是」瀑布模式的缺點?", "各階段的產出都須經過確認、驗證及測試,藉此發現品質缺失並改善", "專案開始時必須完整且清楚地描述所有需求", "客戶要到專案末期才能看到產品", "各階段的改變或錯誤須回溯到前一階段,並經冗長的審查簽核", "階段產出需確認、驗證與測試是瀑布模式的特性,其餘為缺點。"], ["下列何者「不是」Scrum 的儀式?", "燃盡圖", "衝刺規劃", "衝刺審查", "衝刺回顧", "四個儀式:衝刺規劃、每日立會、衝刺審查、衝刺回顧;燃盡圖是產出。"], ["下列何者是 RUP 模式的缺點?", "模式過於繁雜,企業學習與導入困難,且支援工具受限於 IBM Rational 軟體", "缺乏視覺化模型", "無法迭代", "不重視需求分析", "RUP 的缺點是過於繁雜且工具受限於 IBM Rational;它其實有視覺化模型、可迭代且重視需求。"], ["下列何者是漸進模式的缺點?", "需要對每個漸進階段做清楚完整的定義,可能使系統開發期程變長", "無法分階段編列預算", "風險管理成本過高", "完全沒有文件可供維護", "漸進模式需為每個階段完整定義,期程可能變長。"], ["雛型模式強調以「雛型演進」代替完整的分析與設計,會導致什麼缺點?", "系統文件較不完備,後續程式維護相對困難", "開發成本大幅降低", "客戶無法參與需求溝通", "無法快速滿足使用者需求", "雛型演進取代完整分析設計,文件較不完備,日後維護較困難;影片中此題曾選 D 為錯誤答案。"], ["若組織希望員工能充分熟悉與接受新系統,並有充分時間學習與技術移轉,較適合採用哪一種模式?", "漸進模式", "瀑布模式", "雛型模式", "螺旋模式", "漸進模式分階段建置,員工有充分時間學習。"], ["根據資訊系統開發模式演進圖,下列哪一個模式最早提出(1970 年)?", "瀑布模式", "漸進模式", "雛型模式", "螺旋模式", "瀑布模式由 Royce 於 1970 年提出。"], ["螺旋模式每個循環的四個步驟,順序為何?", "決定目標→識別與解決風險→開發與測試→規劃下個循環", "開發與測試→決定目標→識別與解決風險→規劃下個循環", "規劃下個循環→決定目標→開發與測試→識別與解決風險", "識別與解決風險→決定目標→規劃下個循環→開發與測試", "螺旋模式四象限:決定目標、識別與解決風險、開發與測試、規劃下個循環(正確答案為 B)。"]];
 var Q6=[["判斷團隊是否實踐敏捷,最主要的依據是什麼?", "是否符合敏捷的4個價值觀與12項原則", "是否使用指定的專案管理軟體", "是否完全取消專案文件", "是否每天變更工作目標", "判斷是否實踐敏捷,看的是否符合敏捷四個價值觀與十二項原則,而不是工具或形式。"], ["APMF敏捷專案管理架構的核心目的為何?", "協助團隊將專案的商業價值最大化", "讓所有專案採用相同的工作流程", "將專案文件數量降至最低", "將專案決策集中於主管", "APMF 的核心目的是協助團隊將專案商業價值最大化。"], ["敏捷專案管理是哪兩種管理方式的融合與協調?", "科學化管理與人性化管理", "財務管理與行銷管理", "集權管理與行政管理", "品質管理與設備管理", "敏捷專案管理融合科學化管理與人性化管理。"], ["APMF架構以哪四個面向說明專案的運作?", "參與人員、階段、工作事項、產出", "成本、品質、採購、風險", "需求、設計、開發、維護", "願景、預算、績效、獎酬", "APMF 以參與人員、階段、工作事項、產出四個面向說明專案運作。"], ["敏捷專案在一開始應如何規劃?", "先做大方向規劃,再逐步細化", "完成全部需求細節後才核准專案", "預先固定所有迭代的工作細節", "等第一次發布後才建立專案方向", "敏捷採漸進明細:先有大方向,再逐步細化。"], ["敏捷專案每次發布增量成果後,取得客戶回饋的主要用途為何?", "修改本次產品,並調整後續規劃", "作為延後驗收的依據", "證明原始規劃不需調整", "取代後續所有測試活動", "客戶回饋用來修改產品並調整後續規劃。"], ["下列哪一項工作屬於「可行性分析階段」?", "準備營運企劃案與核准專案", "開發並測試增量成果", "進行每日立會", "進行迭代回顧", "可行性分析階段的工作是準備營運企劃案與核准專案。"], ["「產品盒、願景卡」主要對應下列哪一項工作?", "建立專案共同的願景", "估算用戶故事點數", "準備驗收測試案例", "結束專案活動", "產品盒與願景卡用來建立專案共同願景。"], ["下列何者是「起始階段」的工作?", "建立產品地圖", "進行發布回顧", "交付最終專案成果", "開發本次迭代的增量成果", "建立產品地圖屬起始階段工作。"], ["敏捷專案章程包含下列哪兩項內容?", "專案章程與團隊章程", "採購契約與保固契約", "測試案例與測試報告", "發布紀錄與驗收紀錄", "敏捷專案章程包含專案章程與團隊章程。"], ["起始階段所產出的「角色卡」,主要用於什麼目的?", "更詳細地描述利害關係人", "記錄每日出勤情形", "計算成員績效獎金", "取代產品待辦清單", "角色卡用來更詳細地描述利害關係人。"], ["下列哪一項屬於「發布循環階段」的工作?", "分解用戶故事並定義驗收標準", "首次核准專案", "建立最初的專案共同願景", "結束所有專案活動", "分解用戶故事並定義驗收標準屬發布循環階段。"], ["在發布循環中,「刺探」(Spike)的用途為何?", "蒐集下一迭代用戶故事的細節資料", "決定團隊成員的升遷順序", "取消尚未完成的所有需求", "取代發布回顧會議", "刺探用來蒐集用戶故事的細節資料。"], ["下列哪一項是迭代循環子階段的產出?", "通過驗收測試的增量成果", "營運企劃案", "專案核准文件", "產品盒與願景卡", "迭代循環的產出是通過驗收測試的增量成果。"], ["專案結束階段應進行下列哪一項活動?", "交付專案成果並進行專案回顧", "辨識專案角色", "建立產品待辦清單", "蒐集下一迭代的需求細節", "結束階段要交付專案成果並進行專案回顧。"], ["某次發布包含2次迭代,每次迭代2週。若不另計其他時間,該次發布共需幾週?", "4週", "不一定,視狀況而定", "2週", "8週", "2 次 × 2 週 = 4 週。"], ["下列有關迭代工作方式的描述,何者正確?", "在迭代內同步進行分析、設計、寫程式與測試", "第一個迭代負責分析,最後一個迭代負責測試", "程式都撰寫完成之時,就是測試者開始加入團隊的時間", "所有發布結束後,才進行產品測試", "敏捷在每個迭代內同步進行分析、設計、寫程式與測試。"], ["下列關於「時間盒」(Time Boxing)主要意義的敘述,何者正確?", "將專案、發布、迭代與會議限制在固定時間內", "由成員自行決定何時結束所有工作", "只記錄工作時間,不設定完成期限", "因為是個黑盒子,方便工作未完成時,可延長原定週期", "時間盒是把專案、發布、迭代與會議限制在固定時間內。"], ["依照業界最佳工作實務,每日立會的時間,一般設定為多久?", "15分鐘", "5分鐘", "45分鐘", "60分鐘", "每日立會一般設定為 15 分鐘。"], ["當一個迭代內的用戶故事工作都完成後,應接著進行什麼?", "進行迭代審查與回顧", "直接開始下一個迭代", "立即結束整個專案", "重新進行專案可行性分析", "迭代工作完成後進行迭代審查與回顧。"], ["下列哪一種描述最符合敏捷團隊的定義?", "充分授權、自我組織的跨職能團隊", "由主管逐項分派工作的單一專業團隊", "不需要與客戶溝通的獨立團隊", "由個別成員各自完成工作的臨時集合", "敏捷團隊是充分授權、自我組織的跨職能團隊。"], ["團隊成員主動從待辦清單中拿取適合的工作,而非等待主管指派,主要展現哪一項特質?", "自律", "會議紀律", "團隊競爭", "績效考核機制", "主動承接工作展現的是自律。"], ["「共同分擔責任」最適合以下哪一種行為呈現?", "成員共同制定並承諾計畫,互相協助完成任務", "制定層層負責的階層式管理制度", "由敏捷教練和專案負責人共同承諾所有工作", "將工作落後的責任交由客戶承擔", "共同分擔責任是成員共同承諾並互相協助。"], ["團隊將規劃、流程、決策及迭代狀況以圖表展示在牆上,主要是為了什麼?", "提高透明度,協助及早發現問題", "減少成員參與決策的機會", "取代團隊成員之間的所有討論", "讓主管能完全控制每個人的工作方式", "資訊圖表展示牆的目的是提高透明度並及早發現問題。"], ["敏捷團隊如何兼顧靈活性與公司標準?", "在公司制度與標準下,允許靈活選擇合適的工作方式", "因為敏捷團隊是自我組織的團隊,所以可不遵守公司制度,較具靈活性", "取消公司標準,額外建立團隊規則", "所有團隊都必須採用完全相同的工作細節", "應在公司制度與標準下,彈性選擇合適的工作方式。"], ["依據APMF的團隊範圍說明,下列哪組角色位於敏捷團隊外圈,雖非團隊成員,卻對專案影響重大?", "贊助者與利害關係人", "產品負責人與敏捷教練", "團隊成員與測試者", "敏捷教練與測試者", "贊助者與利害關係人位於團隊外圈。"], ["「利害關係人」是指?", "參與專案、受專案影響,或可能影響專案的個人與組織", "提供經費的個人或組織", "參與程式開發的個人或組織", "專案成果的最終購買者", "利害關係人是參與、受影響或能影響專案的個人與組織。"], ["敏捷專案管理與傳統專案管理最大的不同為何?", "將客戶或利害關係人代表納入敏捷團隊", "敏捷專案不需要管理利害關係人", "敏捷專案沒有時間與資源限制", "工作主要交由產品負責人執行", "敏捷把客戶或利害關係人代表納入團隊。"], ["開發團隊通常具有下列哪一項特徵?", "通常少於12人,並具有跨職能特性", "人數越多越好,工作比較容易快速做完", "所有人都必須精通每一種工作", "團隊成員最好都擁有同樣專長,比較好溝通", "開發團隊通常少於 12 人且具跨職能特性。"], ["「通用專家」(Generalizing Specialists)的意義為何?", "成員擁有多項專精,能互相支援,但不必樣樣精通", "對所有工作都有認識,但沒有任何專長", "每位成員都必須精通全部專業領域", "每位成員只能從事一種固定工作", "通用專家擁有多項專精、能互相支援,但不必樣樣精通。"], ["團隊成員依專長選取待辦清單最上方的工作,主要考量為何?", "優先選擇對客戶價值最高的工作", "優先選擇最容易完成的工作", "優先選擇主管最熟悉的工作", "優先選擇不需要合作的工作", "取用待辦清單頂端的高價值工作,以客戶價值為優先。"], ["關於敏捷教練的工作,下列哪個說法較正確?", "協助團隊自我組織、建立信任並移除障礙", "代替產品負責人決定所有產品功能", "負責決定工作待辦清單中各工作的優先順序", "負責處理團隊問題", "敏捷教練協助團隊自我組織、建立信任並移除障礙。"], ["「流程裁適」(Process Tailoring)是指什麼?", "根據企業需求,從一般性框架中挑選並整合適合的流程", "所有企業一律採用相同的完整流程", "根據總裁的決定來調整企業流程", "將企業需求調整成完全符合既定流程", "流程裁適是依需求從一般性框架挑選整合適合的流程。"], ["下列哪一項是產品負責人/客戶的主要責任?", "擁有產品待辦清單,決定工作內容與優先順序", "提供全部專案財務資源", "親自執行所有開發與測試工作", "代替所有成員選擇每日工作的技術方法", "產品負責人擁有產品待辦清單,決定工作內容與優先順序。"], ["下列哪一項是贊助者的主要工作?", "提供專案目標與財務資源,關注產品價值及成本", "撰寫所有驗收測試案例", "每日逐一指派開發人員的工作", "取代產品負責人維護每張用戶故事卡", "贊助者提供專案目標與財務資源,並關注價值及成本。"], ["從傳統領導轉向僕人式領導時,領導者應進行哪一項主要轉變?", "從親自解決問題轉向提倡授權與協助成員成長", "從協助團隊轉向加強命令控制", "從授權成員轉向集中所有決策", "從關注成長轉向只關注個人績效", "僕人式領導重授權與協助成員成長。"], ["當主管從「命令與控制」轉向僕人式領導時,最需要練習的能力為何?", "積極傾聽", "加強監督", "自我反思", "爭取資源", "僕人式領導最需練習積極傾聽。"], ["積極傾聽的有效步驟,依序為何?", "傾聽、瞭解、回應", "傾聽、判斷、回應", "傾聽、分析、考核", "傾聽、瞭解、紀錄", "積極傾聽步驟:傾聽、瞭解、回應。"], ["團隊遇到問題時,下列哪一種回應最符合僕人式領導?", "「你有什麼建議?需要協助時請讓我知道。」", "「你就照著我給你的這個辦法做就可以。」", "「這是你的問題,既是自我組織的團隊,就應自行承擔。」", "「先停止所有工作,等我決定每一個細節。」", "僕人式領導是引導並提供支援,而非命令或放任。"], ["情緒智商(EQ)主要指哪一種能力?", "瞭解與管理情緒、社會互動及人際關係的能力", "快速完成技術工作的能力", "記住團隊所有規章的能力", "以職權壓制不同意見的能力", "EQ 是瞭解與管理情緒、社會互動及人際關係的能力。"], ["下列何者是EQ的四個構面?", "自我察覺、自我管理、社會察覺、人際關係管理", "成本管理、品質管理、採購管理、風險管理", "願景設定、需求分析、程式開發、產品測試", "專業知識、文件寫作、時程安排、預算編列", "EQ 四構面:自我察覺、自我管理、社會察覺、人際關係管理。"], ["團隊規範(Team Norms)應如何建立?", "團隊共同制定工作協定,並一致同意遵守", "由贊助者單方面規定所有工作細節", "等專案結束後,再整理成員習慣", "讓每位成員自行訂定規則,自己管自己", "團隊規範由團隊共同制定並一致同意遵守。"], ["「調適性領導」(Adaptive Leadership)是指?", "依團隊不同發展階段,採用不同領導方式", "調適能力很強的主管", "完全不須領導者就能自行處理所有問題的團隊", "只在專案發生重大失敗後才介入", "調適性領導是依團隊發展階段調整領導方式。"], ["高效能團隊的四個發展階段,正確順序為何?", "建立期、風暴期、規範期、高效期", "建立期、風暴期、高效期、規範期", "規範期、建立期、風暴期、高效期", "建立期、規範期、高效期、風暴期", "團隊發展順序:建立期、風暴期、規範期、高效期。"], ["團隊成員正處於互相挑戰、意見碰撞的階段,最可能是處於高效能團隊發展的哪一期?", "風暴期", "高效期", "規範期", "建立期", "互相挑戰、意見碰撞是風暴期。"], ["團隊成員以事實為基礎分享資訊,並互相合作,屬於哪一個衝突等級?", "第1級「解決問題」", "第2級「不同意」", "第3級「競爭」", "第4級「聖戰」", "第1級是以事實為基礎分享資訊並合作解決問題。"], ["面對第2級「不同意」的衝突,宜採用哪一種管理方式?", "支持並授權每個人解決問題", "立即解散團隊", "停止所有資訊分享", "以法務手段建立安全結構", "第2級衝突宜支持並授權成員自行解決問題。"], ["當團隊成員認為「贏得勝利比解決問題更重要」,且言語出現人身攻擊時,最可能屬於哪一級衝突?", "第3級「競爭」", "第1級「解決問題」", "第2級「不同意」", "第5級「世界大戰」", "重勝利輕問題、出現人身攻擊屬第3級競爭。"], ["面對第4級「聖戰」衝突,應如何處理較好?", "建立安全的結構,並使用外交手段", "只要求成員增加資訊分享即可", "鼓勵各團體持續爭取勝利", "完全不介入,等待衝突自行消失", "第4級衝突需建立安全結構並採外交手段。"], ["第5級「世界大戰」衝突的管理重點為何?", "盡一切必要努力,避免互相傷害", "鼓勵成員繼續辯論立場", "立即進行產品功能排序", "讓雙方各自訂定更高的競爭目標", "第5級衝突重點是避免互相傷害。"], ["下列哪一種溝通方式的效率與效能最高?", "兩人面對面利用白板討論", "僅以紙本文件單向傳遞資訊", "播放影片且不開放問答", "僅透過文字公告傳達決策", "兩人面對面利用白板討論是效率與效能最高的溝通。"], ["「高頻寬溝通」,主要是指什麼?", "面對面的雙向溝通", "使用容量較大的電子郵件附件", "增加每週書面報告的頁數", "使用速度最快的傳輸網路", "高頻寬溝通指面對面的雙向溝通。"], ["工作距離與溝通成本的關係為何?", "距離越遠,溝通成本通常越高", "距離越遠,溝通成本一定越低", "距離不會影響溝通成本", "只有跨國距離才會影響溝通成本", "距離越遠,溝通成本通常越高。"], ["「滲透式溝通」主要是如何發生的?", "成員在共同空間中,透過聆聽周遭對話掌握資訊", "每位成員每天繳交個人報告", "由秘書紀錄詳細會議內容再轉傳給所有團隊成員", "將所有正式公文改成Memo", "滲透式溝通是在共同空間中聽到周遭對話而獲得資訊。"], ["敏捷團隊集中辦公的空間,又可稱為什麼?", "作戰室", "資源中心", "行政中心", "資訊中心", "敏捷團隊集中辦公空間稱為作戰室。"], ["下列何者屬於良好團隊空間配置?", "提供資訊發布站、討論環境與支援工具", "主管辦公室最好不要跟員工的在一起,以免製造壓力", "取消討論環境,避免成員互相干擾", "每人最好都有獨立的一間辦公室", "良好配置提供資訊發布站、討論環境與支援工具。"], ["下列哪一項是遠距團隊的優點?", "能吸納更多人才,並增加文化多樣性", "可以完全避免溝通問題", "不再需要團隊工作協定", "不需要進行任何協同工作", "遠距團隊可吸納更多人才並增加文化多樣性。"], ["為提高遠距團隊的專案成功機會,應該怎麼做較好?", "若條件允許,先共同工作,再分地工作", "開會的時候大家都把攝像頭打開,以利看清楚彼此", "所有成員把文件寫得更仔細一點,以文件取代討論,以利留下證據", "將全部決策交由各地成員自行處理,避免整合困難", "條件允許時先共同工作建立默契,再分地工作。"], ["無論是專案、發布或迭代,敏捷教練在初期、中期與末期應如何安排指導方式?", "初期全隊教練、中期個別教練、末期全隊教練", "初期個別教練、中期全隊教練、末期個別教練", "初期全隊教練、中期全隊教練、末期停止指導", "初期停止指導、中期個別教練、末期個別教練", "初期與末期全隊教練,中期個別教練。"], ["下列哪一個問題最適合在每日立會中提出?", "「目前有什麼問題或阻礙會影響你的工作進展?」", "「公司明年的整體組織架構要如何調整?」", "「下一個年度應採用哪一種領導理論?」", "「整個專案結束後應如何分配獎金?」", "每日立會聚焦工作進展與阻礙。"], ["某團隊準時完成所有原訂功能,但客戶認為這些功能已不符合目前的營運需要。依APMF的核心理念,最適當的判斷為何?", "團隊應重新檢視專案願景與商業價值,據以調整後續工作", "準時完成原訂功能,就代表專案已達成最高價值", "問題完全來自客戶,因不再當初的合約裡,所以不需要調整專案管理方式", "增加測試次數,以確保功能符合客戶目前需要", "APMF 重視商業價值,應重新檢視願景並調整後續工作。"], ["某公司導入敏捷時,要求每個部門完全照搬同一套流程,不得調整。依你對敏捷的了解,你覺得應該要採取下列哪一項建議做調整會比較恰當?", "維持敏捷價值觀與原則,再依組織文化及需求裁適流程", "尊重成員的意願,必要時可取消或更動敏捷價值觀與原則無妨", "將所有流程改為個人自行決定,不需要共同架構", "先固定工具,再要求所有專案改變目標以配合工具", "價值觀與原則不變,流程依組織需求裁適。"], ["某團隊在第一次發布後收到客戶回饋,只修正已交付的功能,卻不調整後續規劃。此做法最主要忽略了什麼?", "回饋也應用於修正後續規劃,落實漸進明細", "發布後應立即結束專案", "客戶回饋只能用於最終驗收", "後續規劃只能由贊助者更動", "回饋應同時用於修正後續規劃,落實漸進明細。"], ["某專案尚未確認共同願景與商業論證,就開始進行詳細的用戶故事點數估算。依APMF階段安排,最應優先補足哪一項工作?", "完成可行性分析所需的願景、營運企劃案與專案核准", "準備所有迭代的驗收測試案例", "進行專案結束回顧", "決定每日立會的發言順序", "應先完成可行性分析所需的願景、營運企劃案與核准。"], ["團隊正在建立角色卡、進行高階估算,並繪製產品地圖。這組工作最可能屬於APMF的哪一階段?", "起始階段", "可行性分析階段", "結束階段", "迭代審查階段", "角色卡、高階估算與產品地圖屬起始階段。"], ["某團隊已準備展開下一迭代,但對其中一項用戶故事的細節仍不清楚。在這種狀況下,最適合運用哪一項活動補足資料?", "刺探(Spike)", "可行性分析", "迭代審查", "迭代回顧", "用戶故事細節不清楚時,用刺探蒐集細節。"], ["某團隊準備依下列順序進行工作:①迭代規劃、②開發與測試增量成果、③迭代審查與回顧、④下一迭代規劃。下列敘述何者正確?", "此順序能讓團隊將本次檢視與回顧的發現帶入下一次規劃", "應將③移至整個專案結束後才進行", "應取消②中的測試,留到迭代完成後才進行", "應先完成④,才可討論本次迭代的改進事項", "先審查回顧再規劃下一迭代,可把發現帶入下一次規劃。"], ["某團隊每兩週完成一次迭代,但從未將成果交付客戶。團隊宣稱:「只要持續迭代,就已充分實現敏捷。」你身為敏捷專案經理,你的看法是?", "仍應透過發布交付有價值的增量成果,並取得客戶回饋", "正確,迭代是敏捷最重要的核心,有持續迭代即可", "正確,客戶只需在最後專案最終驗收時滿意即可", "應取消迭代,改為一次完成全部成果", "敏捷要透過發布交付價值並取得客戶回饋。"], ["某次發布包含3次迭代,每次迭代2週。團隊規劃連續進行2次相同安排的發布。若不另計其他時間,總共需要多久?", "12週", "6週", "8週", "10週", "3 × 2 = 6 週,兩次發布共 12 週。"], ["團隊預計在下一次規劃前,先討論本次合作方式與流程有哪些地方可以改善。下列哪一組「活動與產出」最符合此目的?", "回顧會議與改進行動方案", "可行性分析與產品盒", "角色辨識與角色卡", "高階估算與產品地圖", "回顧會議的產出是改進行動方案。"], ["團隊成員表示:「自我組織就是每個人各做各的,完成自己的部分就好。」下列哪一項最能指出此說法的問題?", "自我組織仍要求共同承諾、分擔責任及互相支援", "自我組織要求所有工作都由主管指派", "自我組織表示不需要與客戶溝通", "自我組織只適用於沒有共同目標的工作", "自我組織仍需共同承諾、分擔責任與互相支援。"], ["某成員已完成自己的工作,但另一位成員的高優先工作遇到困難。在此情況下,最符合敏捷團隊精神的做法為何?", "在能力範圍內提供支援,協助團隊完成共同承諾", "優先挑選較容易完成的低價值工作,增加個人完成件數", "等敏捷教練下令後,才考慮是否協助", "將困難工作退回產品負責人,要求他親自完成", "敏捷團隊共同承諾,成員會互相支援。"], ["某開發人員認為高商業價值的工作較困難,因此只挑選清單底部自己熟悉的工作。針對這種情況,最適當的調整方式為何?", "依專長優先承接高價值工作,必要時與其他成員合作", "只要個人工作速度快,就不需要考慮清單排序", "將所有困難工作保留到專案最後處理", "由贊助者取代開發人員完成困難工作", "應優先承接高價值工作,必要時與他人合作。"], ["某公司認為「通用專家」代表每個人都必須精通所有技術,才能加入敏捷團隊。針對這個說法,下列哪一項修正最適當?", "成員應具備多項專精並能互動,但不必樣樣精通", "成員完全不需具備專長,只需願意參與", "成員應只保留一項專長,以免分散注意力", "團隊只需要一位精通全部工作的成員,其餘人員不需學習", "通用專家是多項專精並能互相支援,不必樣樣精通。"], ["某團隊允許成員自行安排工作,但要求所有人完全照主管指定的方式執行,且不得提出改進。這種情況反應的是?", "此安排削弱了自我組織與團隊改善工作方式的空間", "此安排充分落實了自下而上的智慧", "只要成員能自行選擇上班時間,就代表充分授權", "敏捷團隊本來就不應參與流程決策", "不得提出改進,削弱了自我組織與改善工作方式的空間。"], ["產品負責人長期無法聯繫,且對需求優先順序沒有決策權。這最可能造成哪一項問題?", "團隊難以及時確認工作方向,並將生產力轉換為價值", "團隊可以因此省略所有需求確認", "敏捷教練自然取得所有產品決策權", "贊助者不再需要關注產品價值", "產品負責人缺位,團隊難以確認方向並把產能轉為價值。"], ["多位主管分別要求團隊優先處理自己的需求,導致工作順序互相衝突。最適當的處理方式為何?", "由產品負責人整合需求,依商業價值排定優先順序", "讓每位開發人員自行選擇要聽從哪位主管", "以提出需求者的職級決定優先順序", "將所有需求設為最高優先,要求團隊同時完成", "由產品負責人整合需求並依商業價值排序。"], ["下列哪一組分工最符合敏捷團隊的運作方式?", "產品負責人決定做什麼及順序,敏捷教練協助團隊合作與排除障礙", "贊助者決定所有技術細節,測試者決定產品價值", "敏捷教練提供全部經費,產品負責人移除所有組織障礙", "開發團隊決定全部產品優先順序,產品負責人執行每日測試", "產品負責人決定內容與順序,敏捷教練協助合作並排除障礙。"], ["當某專案發生跨部門資源障礙,團隊成員無法自行排除時,敏捷教練該做什麼?", "協助移除障礙,必要時與贊助者或發起人協調", "要求成員在沒有資源的情況下照原計畫完成", "直接取消產品負責人的需求決策權", "將問題留到專案結束時再討論", "教練協助移除障礙,必要時向贊助者協調。"], ["贊助者認為已提供經費,因此不需要參加任何成果審查。你做為資深敏捷經理,你的建議是?", "應參加發布與迭代審查,了解增量成果及其價值", "同意,出錢的是大爺,他提供財務資源後本就不需再參與", "應改為每日透過產品負責人替所有成員指派工作", "只需檢查工時紀錄,不需檢視成果", "贊助者應參與審查,了解增量成果與價值。"], ["團隊詢問敏捷教練應如何解決某項問題。下列哪一項回應最能同時展現授權與支持?", "「你們認為有哪些可行方法?需要哪些資源或協助?」", "「等我找出唯一正確的答案,你們再開始。」", "「你們自己決定,我不干預。」", "「先照過去的方法試試看。」", "引導團隊思考方法並提供資源,兼顧授權與支持。"], ["一個總是幫團隊做所有決策、自稱採取僕人式領導的主管,其最主要的問題為何?", "持續代替團隊思考,限制成員自主決策與成長", "提供協助過少,應增加命令次數", "沒有要求團隊取消共同願景", "未將全部問題轉交贊助者處理", "代替團隊做所有決策,限制自主決策與成長。"], ["在討論衝突時,敏捷教練先完整聽取成員說法,再確認自己是否理解,最後提出回應。此做法最符合哪一項概念?", "積極傾聽", "流程裁適", "高階估算", "角色辨識", "先傾聽、瞭解再回應,就是積極傾聽。"], ["某成員察覺自己因進度落後而焦躁,並主動調整表達方式,避免將情緒發洩在同事身上。此情境主要結合哪兩項EQ能力?", "自我察覺與自我管理", "社會察覺與自我管理", "社會察覺與積極傾聽", "人際關係管理與情緒控制", "察覺自己情緒是自我察覺,調整表達是自我管理。"], ["團隊規範由所有成員共同同意,但有一位資深成員主張自己不必遵守。這時,最適當的處理原則為何?", "共同制定的基本原則適用於全體團隊成員", "因為他夠資深,可讓他自行決定是否適用", "本就只有新進人員需要遵守團隊規範", "團隊規範只供參考,不應影響行為", "團隊規範適用全體成員。"], ["某主管不論團隊處於建立期或高效期,都採用完全相同的指導方式。他最應補強哪一項能力?", "調適性領導", "多角化經營", "積極傾聽", "APMF", "應依團隊發展階段調整領導方式,即調適性領導。"], ["某團隊的成員原本互相挑戰,後來逐漸建立共同工作方式,開始順利合作。依團隊發展階段,他們最可能是正發生哪一項轉變?", "風暴期轉為規範期", "高效期轉為建立期", "規範期轉為風暴期", "建立期轉為結束期", "從互相挑戰到建立共同工作方式,是風暴期轉為規範期。"], ["團隊成員能以共同目標協調行動,整體運作如同一個合作單位。最接近哪一階段?", "高效期", "建立期", "風暴期", "可行性分析期", "整體如同合作單位是高效期。"], ["兩位成員對方案持不同意見,但仍以事實交換資訊,並願意尋找雙贏結果。此時,最適當的管理方式為何?", "促進合作,持續聚焦問題與雙贏結果", "立即建立隔離結構,禁止雙方接觸", "將雙方視為已進入第5級衝突", "要求其中一方放棄意見,以利專案進行", "屬第1級衝突,應促進合作並聚焦問題。"], ["某次討論逐漸從比較方案,轉為「一定要證明對方能力不足」,並開始出現人身攻擊。此時,最適當的介入方式為何?", "進行調停、談判,並協助取得事實", "只增加書面報告,不處理衝突", "鼓勵雙方持續競爭,直到其中一方認輸", "認定這只是正常資訊分享,不需介入", "已升高為競爭,宜進行調停與談判並協助取得事實。"], ["兩個小組將焦點放在保護自己的團體,並以意識形態標籤指責對方。你判斷這情況是?", "接近第4級衝突,應建立安全結構並採取外交手段", "屬於第1級衝突,應直接放任合作", "屬於第2級衝突,只需分派更多工作", "屬於正常的迭代審查,不需要衝突管理", "保護團體與意識形態指責,接近第4級聖戰。"], ["某團隊衝突升高,雙方以摧毀對方為目標,且幾乎不再交談。此時最優先的處理目標為何?", "避免彼此傷害", "加快下一迭代的點數估算", "增加產品待辦清單的項目", "立即要求雙方共同承諾更多工作", "第5級衝突最優先是避免彼此傷害。"], ["團隊透過大量電子郵件討論模糊需求,往返多次仍無共識。最適當的改善方式為何?", "安排面對面白板討論,透過雙向問答澄清需求", "增加副本收件人,讓更多人收到同樣內容", "將每封郵件改得更長,減少即時互動", "將討論延至專案最終驗收", "改用面對面的高頻寬溝通來澄清需求。"], ["公司將原本同室工作的團隊分散到不同樓層,卻未補充其他溝通安排。最可能受到影響的是什麼?", "自然聆聽周遭對話的機會減少,溝通成本可能增加", "團隊一定能獲得更多滲透式溝通", "因距離增加,團隊就不再需要共同規範", "所有成員的技術能力會立即下降", "距離變遠,滲透式溝通減少,溝通成本可能增加。"], ["某公司設置團隊作戰室,但禁止成員討論,也不展示任何專案資訊。最合理的評估為何?", "雖集中辦公,卻未充分發揮促進溝通與團隊意識的功能", "只要空間名稱是作戰室,就已達成目的", "禁止討論能充分發揮集中辦公的價值", "資訊應只提供給主管,才符合保密原則", "作戰室要能促進溝通與團隊意識。"], ["某跨國遠距團隊成員能力優秀,合作卻持續不順。下列哪一項分析最合理?", "除專業能力外,還應檢視溝通協作、時區、階級意識及文化差異", "人才優秀就足以保證合作,不需檢視其他因素", "遠距團隊不適合建立共同工作方式", "只要增加每日個人工時,就能排除所有問題", "遠距合作還要檢視溝通、時區、階級與文化差異。"], ["某專案的流程與文件都很完整,但團隊不願合作,也不接受客戶回饋。最適當的改善方向為何?", "同時檢視管理流程與人的互動,恢復價值導向及協作", "增加文件頁數,讓流程更完整", "將所有問題交由主管逐項裁決", "停止與客戶接觸,避免需求變動", "應兼顧流程與人的互動,恢復價值導向與協作。"], ["敏捷教練要安排一個迭代的指導方式,下列哪一項最適當?", "初期全隊教練,中期個別教練,末期再進行全隊教練", "初期只進行個別指導,末期不再參與", "初期個別教練,中期全隊教練,末期再進行個別教練", "只有發生嚴重衝突時才提供全隊指導", "初期與末期全隊教練,中期個別教練。"], ["每日立會中,某成員提出目前工作遭遇的阻礙,接著有人建議立即在會中重新設計公司整體制度。此時,最適當的處理方式為何?", "先掌握影響工作進展的阻礙,較深入的議題另行安排,維持時間盒", "讓會議持續進行,直到公司制度完全討論完畢", "禁止成員提出任何阻礙,以免超時", "取消每日立會,改由每月一次的會議處理所有問題", "每日立會要維持時間盒,深入議題另行安排。"], ["某團隊想同時落實「價值驅動」「自我組織」及「持續改善」。下列哪一組做法最合理?", "產品負責人依價值排序,成員依專長主動承接並互助,回顧後提出改進行動", "主管依職級排序需求,成員等待指派,專案結束後才討論問題", "成員自行選擇最容易的工作,不必參考共同願景或待辦清單", "固定所有需求與流程,避免因客戶回饋而調整計畫", "依價值排序、依專長互助承接,並以回顧持續改善。"], ["下列哪一個問題適合在「每日立會」中提出?", "你碰到的困難是什麼?", "你明天預計完成哪些工作?", "我們的團隊要如何才能增加效率?", "我們的團隊要如何才能讓事情有效果?", "每日立會問的是遇到的困難;團隊如何增進效率屬回顧會議。"], ["當迭代內的工作完成後,接下來要進行的是?", "回顧", "下一個迭代", "下一個發布", "規劃會議", "迭代工作完成後先進行回顧。"], ["在敏捷專案中,「產品地圖」會在何時產生?", "在專案起始時", "在交付開始時", "在迭代開始時", "在回顧時", "產品地圖在專案起始階段產生。"], ["在敏捷專案中,當發布完成後,接下來要進行的是?", "回顧", "下一個發布", "下一個迭代", "規劃會議", "發布完成後進行回顧。"], ["下列何者是適合用來進行「回顧(Retrospective)」的時機?", "在規劃前", "在展示與審查時", "每日立會時", "迭代規劃時", "回顧適合在下一次規劃前進行。"]];
 var CH=[{n:"第零章 專案管理概論",Q:Q0,EX:[],k:"_c0"},{n:"第一章 敏捷思維",Q:Q1,EX:[],k:"_c1"},{n:"第一章 測驗題庫",Q:Q2,EX:[],k:"_c1x"},{n:"第二章 傳統與敏捷方法論",Q:Q4,EX:[],k:"_c2"},{n:"第二章 測驗題庫",Q:Q5,EX:[],k:"_c2y"},{n:"第一、二章 總複習題庫",Q:Q3,EX:[],k:"_c2x"},{n:"第三章 敏捷專案管理架構",Q:Q,EX:EX,k:""},{n:"第三章 測驗題庫",Q:Q6,EX:[],k:"_c3x"},{n:"總複習",Q:R,EX:EX2,k:"_r"}],cur=0,wk,bk,wrong,best,list=[],idx=0,right=0,miss=[];
-var sel=ld("aq_sel",null)||CH.map(function(_,i){return i}),pool=[],list=[],idx=0,right=0,miss=[],viewC=-1,wk,bk;
+var CHAP=[["Ch0",[0]],["Ch1",[1,2]],["Ch2",[3,4]],["Ch3",[6,7]],["總複習",[5,8]]],SRC=[["講義習題",[0,1,3,6]],["測驗題庫",[2,4,5,7]],["總複習題庫",[8]]];
+var F=ld("aq_f2",null);
+if(!F||!F.ch||!F.tp||typeof F.src!=="number")F={ch:[],src:-1,tp:[],sc:"all",n:20,sh:true};
+var pool=[],list=[],idx=0,right=0,miss=[],viewC=-1,bestKey="_mix";
 function wOf(c){return ld("aq_wrong"+CH[c].k,[])}
-function curKey(){return sel.length===1?CH[sel[0]].k:"_mix"}
+function seenOf(c){return ld("aq_seen"+CH[c].k,[])}
+function curKey(){return bestKey}
+function sshuf(a,s){a=a.slice();for(var i=a.length-1;i>0;i--){s=(s*1103515245+12345)&0x7fffffff;var j=s%(i+1),t=a[i];a[i]=a[j];a[j]=t}return a}
+function banks(){var a=CH.map(function(_,i){return i});
+  if(F.ch.length){var u=[];F.ch.forEach(function(j){u=u.concat(CHAP[j][1])});a=a.filter(function(i){return u.indexOf(i)>=0})}
+  if(F.src>=0)a=a.filter(function(i){return SRC[F.src][1].indexOf(i)>=0});
+  if(F.tp.length)a=a.filter(function(i){return F.tp.indexOf(i)>=0});
+  return a}
+function fpool(sc){var P=[];banks().forEach(function(c){var w=sc==="wrong"?wOf(c):null,s=sc==="new"?seenOf(c):null;
+  CH[c].Q.forEach(function(_,i){if(w&&w.indexOf(i)<0)return;if(s&&s.indexOf(i)>=0)return;P.push([c,i])})});return P}
+function chip(box,label,on,fn){var b=document.createElement("button");b.className="chip"+(on?" on":"");b.textContent=label;b.onclick=fn;box.appendChild(b)}
+function save(){sv("aq_f2",F);home()}
 function home(){
   $("home").classList.remove("hide");$("quiz").classList.add("hide");$("result").classList.add("hide");
   var chap=viewC>=0,wb=viewC===-2;$("mainPg").classList.toggle("hide",chap||wb);$("chapPg").classList.toggle("hide",!chap);$("wbPg").classList.toggle("hide",!wb);$("hero").classList.toggle("hide",chap||wb);
-  var T=0;CH.forEach(function(c){T+=c.Q.length});$("tot").textContent=CH.length+" 個章節 · 共 "+T+" 題";
+  var T=0;CH.forEach(function(c){T+=c.Q.length});$("tot").textContent=CH.length+" 個題庫 · 共 "+T+" 題";
   if(wb){wbPage();return}
   if(chap){chapPage();return}
-  var tw=0;CH.forEach(function(_,i){tw+=wOf(i).length});$("wbs").textContent=tw?"目前有 "+tw+" 題答錯,附詳解可複習":"目前沒有錯題";$("wbk").onclick=function(){viewC=-2;home();window.scrollTo(0,0)};
-  var G=[["基礎概念",[0,1,2]],["第二章",[3,4,5]],["第三章",[6,7]],["綜合",[8]]],h="";
-  G.forEach(function(g){h+='<div class="grp">'+g[0]+'</div>';g[1].forEach(function(i){var c=CH[i],w=wOf(i).length,on=sel.indexOf(i)>=0;
-    h+='<div class="row"><button class="ck'+(on?' on':'')+'" data-t="'+i+'"><i>'+(on?'✓':'')+'</i><span><b>'+c.n+'</b><small>'+c.Q.length+' 題'+(w?' · 錯題 '+w:'')+'</small></span></button><button class="go" data-v="'+i+'">瀏覽 ›</button></div>'})});
-  $("chs").innerHTML=h;
-  [].forEach.call($("chs").querySelectorAll(".ck"),function(b){b.onclick=function(){var i=+b.dataset.t,k=sel.indexOf(i);k>=0?sel.splice(k,1):sel.push(i);sv("aq_sel",sel);home()}});
-  [].forEach.call($("chs").querySelectorAll(".go"),function(b){b.onclick=function(){viewC=+b.dataset.v;home();window.scrollTo(0,0)}});
-  $("all").onclick=function(){sel=CH.map(function(_,i){return i});sv("aq_sel",sel);home()};
-  $("none").onclick=function(){sel=[];sv("aq_sel",sel);home()};
-  var n=0,wn=0;sel.forEach(function(i){n+=CH[i].Q.length;wn+=wOf(i).length});
-  $("sum").textContent="已選 "+sel.length+" 章 · "+n+" 題";
-  var m=[["隨機 10 題","快速練習,每次題目不同",10],["隨機 20 題","中等長度練習",20],["全部 "+n+" 題(隨機順序)","完整模擬測驗",n],["全部 "+n+" 題(依章節順序)","依章節與題目順序複習","seq"],["錯題複習","已選章節共有 "+wn+" 題待複習","wrong"]];
-  var mh="";m.forEach(function(x,i){mh+='<button data-i="'+i+'"><b>'+x[0]+'</b><span>'+x[1]+'</span></button>'});$("menu").innerHTML=mh;
-  [].forEach.call($("menu").children,function(b){b.onclick=function(){start(m[+b.dataset.i][2])}});
-  var bs=ld("aq_best"+curKey(),0);
-  $("stat").innerHTML="<div><b>"+bs+"</b>最佳成績</div><div><b>"+wn+"</b>錯題本</div><div><b>"+n+"</b>已選題數</div>";
+  var tw=0;CH.forEach(function(_,i){tw+=wOf(i).length});
+  $("wbk2").textContent="📕 錯題本 ("+tw+")";$("wbk2").classList.toggle("dim",!tw);
+  $("wbk2").onclick=function(){viewC=-2;home();window.scrollTo(0,0)};
+  var P=fpool(F.sc),N=P.length,M=F.n?Math.min(N,F.n):N;
+  var cn=F.ch.length?F.ch.map(function(j){return CHAP[j][0]}).join("、"):"全部章節";
+  $("tsub").textContent=cn+"・"+(F.src>=0?SRC[F.src][0]:"全部來源")+","+N+" 題符合設定。";
+  var b=$("fch");b.innerHTML="";chip(b,"全部",!F.ch.length,function(){F.ch=[];save()});
+  CHAP.forEach(function(c,j){chip(b,c[0],F.ch.indexOf(j)>=0,function(){var k=F.ch.indexOf(j);k>=0?F.ch.splice(k,1):F.ch.push(j);save()})});
+  b=$("fsrc");b.innerHTML="";chip(b,"全部來源",F.src<0,function(){F.src=-1;save()});
+  SRC.forEach(function(c,j){chip(b,c[0],F.src===j,function(){F.src=j;save()})});
+  $("tpsum").textContent=F.tp.length?"已選 "+F.tp.length+" 個":"全部主題";
+  $("tpclr").onclick=function(){F.tp=[];save()};
+  var tl=$("ftl");tl.innerHTML="";
+  CH.forEach(function(c,i){var on=F.tp.indexOf(i)>=0,r=document.createElement("button");r.className="tpi"+(on?" on":"");
+    var ic=document.createElement("i"),sp=document.createElement("span"),sm=document.createElement("small");ic.textContent=on?"✓":"";sp.textContent=c.n;sm.textContent=c.Q.length+" 題";
+    r.appendChild(ic);r.appendChild(sp);r.appendChild(sm);r.onclick=function(){var k=F.tp.indexOf(i);k>=0?F.tp.splice(k,1):F.tp.push(i);save()};tl.appendChild(r)});
+  b=$("fsc");b.innerHTML="";
+  chip(b,"全部題目",F.sc==="all",function(){F.sc="all";save()});
+  chip(b,"只練錯題 ("+fpool("wrong").length+")",F.sc==="wrong",function(){F.sc="wrong";save()});
+  chip(b,"還沒做過的",F.sc==="new",function(){F.sc="new";save()});
+  b=$("fcnt");b.innerHTML="";
+  [[10,"10 題"],[20,"20 題"],[40,"40 題"],[0,"全部"]].forEach(function(x){chip(b,x[1],F.n===x[0],function(){F.n=x[0];save()})});
+  $("fsh").checked=!!F.sh;$("fsh").onchange=function(){F.sh=$("fsh").checked;sv("aq_f2",F)};
+  $("finfo").textContent="符合條件 "+N+" 題,這次出 "+M+" 題";
+  $("fgo").onclick=function(){begin(fpool(F.sc),F.n,F.sc!=="all")};
+  $("quick").onclick=function(){begin(fpool(F.sc),10,F.sc!=="all")};
+  var st=0,h="";CH.forEach(function(c,i){var sn=seenOf(i).length,w=wOf(i).length,bs=ld("aq_best"+c.k,0);st+=sn;
+    h+='<div class="pi"><div class="pih"><b></b><button class="mini" data-v="'+i+'">瀏覽 ›</button></div><div class="bar"><i style="width:'+Math.round(sn/c.Q.length*100)+'%"></i></div><small>已做 '+sn+' / '+c.Q.length+' 題 · 錯題 '+w+' · 最佳 '+bs+' 分</small></div>'});
+  var pl=$("plist");pl.innerHTML=h;
+  [].forEach.call(pl.querySelectorAll(".pih b"),function(el,i){el.textContent=CH[i].n});
+  [].forEach.call(pl.querySelectorAll("button[data-v]"),function(bt){bt.onclick=function(){viewC=+bt.dataset.v;home();window.scrollTo(0,0)}});
+  $("psum").textContent=" "+T+" 題 · 已做 "+st+" 題 · 點此展開";
+}
+function begin(P,n,nb){
+  if(!P.length){alert(F.sc==="wrong"?"符合條件的範圍目前沒有錯題,太棒了!":F.sc==="new"?"符合條件的題目你都做過了!":"沒有符合條件的題目,請放寬篩選");return}
+  var bs={};P.forEach(function(x){bs[x[0]]=1});var ks=Object.keys(bs);bestKey=nb?null:(ks.length===1?CH[ks[0]].k:"_mix");
+  list=shuf(P);if(n)list=list.slice(0,n);idx=0;right=0;miss=[];
+  $("home").classList.add("hide");$("result").classList.add("hide");$("quiz").classList.remove("hide");show();window.scrollTo(0,0);
 }
 function wbPage(){
   var tw=0;CH.forEach(function(_,i){tw+=wOf(i).length});$("wtitle").textContent="共 "+tw+" 題待複習";
   $("wback").onclick=function(){viewC=-1;home();window.scrollTo(0,0)};
-  $("wprac").onclick=function(){sel=CH.map(function(_,i){return i});sv("aq_sel",sel);start("wrong")};
+  $("wprac").onclick=function(){var w=[];CH.forEach(function(c,ci){wOf(ci).forEach(function(i){w.push([ci,i])})});F.sc="wrong";begin(w,0,true)};
   var L=$("wlist");L.innerHTML="";
   if(!tw){var e=document.createElement("p");e.textContent="太棒了,目前沒有錯題!答錯的題目會自動收進這裡。";L.appendChild(e);return}
   CH.forEach(function(c,ci){var w=wOf(ci);if(!w.length)return;
@@ -455,24 +537,15 @@ function wbPage(){
 function chapPage(){
   var c=CH[viewC];$("sub").textContent=c.n+" · "+c.Q.length+" 題";
   $("back").onclick=function(){viewC=-1;home();window.scrollTo(0,0)};
-  $("only").onclick=function(){sel=[viewC];sv("aq_sel",sel);viewC=-1;home();window.scrollTo(0,0)};
+  $("only").onclick=function(){F.ch=[];F.src=-1;F.tp=[viewC];F.sc="all";sv("aq_f2",F);viewC=-1;home();window.scrollTo(0,0)};
   $("stat2").innerHTML="<div><b>"+ld("aq_best"+c.k,0)+"</b>最佳成績</div><div><b>"+wOf(viewC).length+"</b>錯題本</div><div><b>"+c.Q.length+"</b>題目數</div>";
   var L=$("qlist");L.innerHTML="";
   c.Q.forEach(function(q,i){var d=document.createElement("details");d.className="qi";var sm=document.createElement("summary");sm.textContent=(i+1)+". "+q[0];d.appendChild(sm);
     var ul=document.createElement("ul");[q[1],q[2],q[3],q[4]].forEach(function(t,k){var li=document.createElement("li");li.textContent=t;if(k===0){li.className="a";li.textContent="✔ "+t}ul.appendChild(li)});d.appendChild(ul);
     var p=document.createElement("p");p.textContent=c.EX[i]||q[5];d.appendChild(p);L.appendChild(d)});
 }
-function start(mode){
-  pool=[];sel.slice().sort(function(a,b){return a-b}).forEach(function(c){CH[c].Q.forEach(function(_,i){pool.push([c,i])})});
-  if(!pool.length){alert("請先選擇至少一個章節");return}
-  if(mode==="seq")list=pool.slice();
-  else if(mode==="wrong"){var w=[];sel.forEach(function(c){wOf(c).forEach(function(i){w.push([c,i])})});if(!w.length){alert("已選章節目前沒有錯題,太棒了!");return}list=shuf(w)}
-  else list=shuf(pool).slice(0,mode);
-  idx=0;right=0;miss=[];
-  $("home").classList.add("hide");$("result").classList.add("hide");$("quiz").classList.remove("hide");show();
-}
 function show(){
-  var it=list[idx],q=CH[it[0]].Q[it[1]],opts=shuf([q[1],q[2],q[3],q[4]]).sort(function(a,b){return (a==="以上皆是")-(b==="以上皆是")}),done=false;
+  var it=list[idx],q=CH[it[0]].Q[it[1]],opts=(F.sh?shuf:function(a){return sshuf(a,it[0]*1000+it[1]+1)})([q[1],q[2],q[3],q[4]]).sort(function(a,b){return (a==="以上皆是")-(b==="以上皆是")}),done=false;
   $("quiz").innerHTML='<div class="top"><span>第 '+(idx+1)+' / '+list.length+' 題</span><span>答對 '+right+'</span></div><div class="bar"><i style="width:'+(idx/list.length*100)+'%"></i></div><div class="card"><p class="q"></p><div id="os"></div><div id="ex"></div></div>';
   $("quiz").querySelector(".q").textContent=q[0];
   opts.forEach(function(t,i){
@@ -483,7 +556,7 @@ function show(){
       if(!ok)b.classList.add("no");
       var c=it[0],id=it[1],wl=wOf(c);
       if(ok){right++;wl=wl.filter(function(w){return w!==id})}else{miss.push(it);if(wl.indexOf(id)<0)wl.push(id)}
-      sv("aq_wrong"+CH[c].k,wl);
+      sv("aq_wrong"+CH[c].k,wl);var sn=seenOf(c);if(sn.indexOf(id)<0){sn.push(id);sv("aq_seen"+CH[c].k,sn)}
       var e=document.createElement("div");e.className="exp";e.textContent=(ok?"✔ 答對了!":"✘ 答錯了。正確答案:"+q[1])+"\n"+(CH[c].EX[id]||q[5]);e.style.whiteSpace="pre-line";$("ex").appendChild(e);
       var n=document.createElement("button");n.className="primary";n.textContent=(idx+1<list.length?"下一題":"查看結果")+"(Enter)";n.onclick=function(){idx++;idx<list.length?show():finish()};$("ex").appendChild(n);
     };
@@ -492,7 +565,7 @@ function show(){
 }
 function finish(){
   var sc=Math.round(right/list.length*100);
-  var bkk="aq_best"+curKey();if(list.length>=10&&sc>ld(bkk,0))sv(bkk,sc);
+  var bkk="aq_best"+curKey();if(bestKey&&list.length>=10&&sc>ld(bkk,0))sv(bkk,sc);
   $("quiz").classList.add("hide");$("result").classList.remove("hide");
   var h='<div class="card"><p class="sub">測驗完成</p><p class="score">'+sc+' 分</p><p>答對 '+right+' / '+list.length+' 題</p>';
   if(miss.length){h+='<h3>本次答錯的題目</h3>';miss.forEach(function(){h+='<div class="wr"><b></b><br><small></small></div>'})}
